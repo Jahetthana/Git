@@ -1,0 +1,117 @@
+The Twitter plugin for WordPress supports embedding the a curated set of Tweets by pasting a Twitter collection URL into the WordPress post editor or by customizing a ``[twitter_collection]`` or ``[twitter_grid]`` `WordPress shortcodes <http://codex.wordpress.org/Shortcode>`__ for a vertical or grid layout of Tweets respectively. WordPress users capable of editing themes may add a Twitter list to a theme's widget area through `the WordPress widget editor <https://codex.wordpress.org/Appearance_Widgets_Screen>`__.
+
+Embed using a Twitter collection URL
+------------------------------------
+
+Add an `embedded collection </web/embedded-timelines/collection>`__ to a WordPress post by copy-and-pasting a Twitter collection URL on its own line in the post content area. A collection will appear as a stacked list of Tweets.
+
+::
+
+    Photos and videos from national parks in the United States
+
+    https://twitter.com/TwitterDev/timelines/539487832448843776
+
+    Bears, mountains, sunrise, sunset.
+
+The Twitter plugin for WordPress extends the oEmbed functionality for Twitter collection URLs available since WordPress 4.5 with additional plugin-specific functionality. URL-based embeds pass through the plugin's shortcode handler for site-wide customization of parameters. JavaScript normally returned in an oEmbed response is enqueued through the WordPress resource manager, improving site performance while centralizing customizations.
+
+Embed using a shortcode (default template)
+------------------------------------------
+
+The Twitter plugin for WordPress registers the ``twitter_collection`` shortcode handler to allow customization of an embedded collection through a shortcode macro.
+
+::
+
+    Photos and videos from national parks in the United States
+
+    [twitter_collection id="539487832448843776" height="400"]
+
+    Bears, mountains, sunrise, sunset.
+
+
+Supported shortcode parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| Attribute    | Description                                                                                  | Example                |
++==============+==============================================================================================+========================+
+| **id**       | The unique numeric identifier of the collection. Appears as the final path component of URL  | ``539487832448843776`` |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| template     | Display a collection in a responsive grid format                                             | ``grid``               |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| width        | Set the maximum width of the collection in whole pixels                                      | ``500``                |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| height       | Set a fixed height of the collection in whole pixels                                         | ``400``                |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| limit        | Display a static collection expanded to up to N Tweets.                                      | ``5``                  |
+|              | The height attribute has no effect when a limit is specified                                 |                        |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| chrome       | Toggle the display of design elements in the widget with comma-separated tokens.             | ``noheader,nofooter``  |
+|              | Accepted tokens: ``noheader``, ``nofooter``, ``noborders``, ``noscrollbar``, ``transparent`` |                        |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| aria_polite  | Set the ARIA politeness of the collection live region as new Tweets are added                | ``assertive``          |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| theme        | Set a ``light`` or ``dark`` widget background                                                | ``dark``               |
+|              | Overrides the site-wide value set through the plugin settings page                           |                        |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| link_color   | Adjust the hexadecimal color of links, including hashtags and @mentions, inside each Tweet.  | ``21759b``             |
+|              | Overrides the site-wide value set through the plugin settings page                           |                        |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+| border_color | Adjust the hexadecimal color of borders between Tweets.                                      | ``d54e21``             |
+|              | Overrides the site-wide value set through the plugin settings page                           |                        |
++--------------+----------------------------------------------------------------------------------------------+------------------------+
+
+Embed using a shortcode (grid template)
+---------------------------------------
+
+The Twitter plugin for WordPress also registers the ``twitter_grid`` shortcode handler to display a collection data in responsive grid template. The ``twitter_grid`` shortcode handler is also invoked for ``[twitter_collection template="grid"]``.
+
+::
+
+    Photos and videos from national parks in the United States
+
+    [twitter_grid id="539487832448843776" limit="3"]
+
+    Bears, mountains, sunrise, sunset.
+
+Supported shortcode parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++-----------+---------------------------------------------------------------------------------------------+------------------------+
+| Attribute | Description                                                                                 | Example                |
++===========+=============================================================================================+========================+
+| **id**    | The unique numeric identifier of the collection. Appears as the final path component of URL | ``539487832448843776`` |
++-----------+---------------------------------------------------------------------------------------------+------------------------+
+| width     | Set the maximum width of the grid in whole pixels                                           | ``500``                |
++-----------+---------------------------------------------------------------------------------------------+------------------------+
+| limit     | Limit the maximum number of Tweets displayed                                                | ``5``                  |
++-----------+---------------------------------------------------------------------------------------------+------------------------+
+| chrome    | Remove the footer component of the embedded grid template                                   | ``nofooter``           |
++-----------+---------------------------------------------------------------------------------------------+------------------------+
+
+Site-wide customization using a filter
+--------------------------------------
+
+A website may set site-wide preferences for a collection by acting on the associative array passed to the ``shortcode_atts_twitter_collection`` `WordPress filter <http://codex.wordpress.org/Plugin_API#Filters>`__. Functions acting on the filter should set a decimal integer when modifying the value of the ``width``, ``height``, or ``limit`` key.
+
+Example:
+
+.. code:: php
+
+    /**
+     * Always display a collection at a height of 400 pixels
+     *
+     * @param array $out        Parsed user-defined valid attributes or default attribute value
+     * @param array $pairs      supported attributes and their default values
+     * @param array $attributes user-defined attributes in the shortcode tag
+     *
+     * @return array options array with our customization applied
+     */
+    function timeline_custom_options( $out, $pairs, $attributes )
+    {
+      $out['height'] = 400;
+      return $out;
+    }
+    add_filter( 'shortcode_atts_twitter_collection', 'timeline_custom_options', 10, 3 );
+
+A website may also act on the ``shortcode_atts_twitter_grid`` shortcode.
