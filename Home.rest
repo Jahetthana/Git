@@ -11,7 +11,7 @@ Customize embedded Tweets
 .. raw:: html
 
    <div><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Check out this epic <a href="https://twitter.com/hashtag/sunset?src=hash">#sunset</a> from Zabriskie point <a href="https://twitter.com/DeathValleyNPS">@DeathValleyNPS</a>. Photo: Mahendiran Mohan <a href="https://twitter.com/hashtag/nature?src=hash">#nature</a> <a href="http://t.co/oCfTvA6Pqc">pic.twitter.com/oCfTvA6Pqc</a></p>&mdash; US Dept of Interior (@Interior) <a href="https://twitter.com/Interior/status/559021352448180225">January 24, 2015</a></blockquote></div>
-   <script async src="https://platform.twitter.com/widgets.js">
+   <script async src="https://platform.twitter.com/widgets.js"></script>
 
 Easily `customize embedded Tweets <embedded-tweet>`__ to match your site design. Choose a dark or light theme, custom link color and custom border color.
 
