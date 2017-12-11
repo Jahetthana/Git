@@ -1,0 +1,12 @@
+The Twitter plugin for WordPress supports embedding profile, list, search and collection timelines.
+
+The plugin extends `oEmbed support <https://codex.wordpress.org/Embeds#Okay.2C_So_What_Sites_Can_I_Embed_From.3F>`__ for timelines with customizable widgets and shortcodes, and optimized JavaScript loading through the WordPress resource manager.
+
+.. note:: An embedded search timeline requires a stored widget ID associated with a Twitter account generated through `twitter.com/settings/widgets <https://twitter.com/settings/widgets/new/search>`__.
+
+Detailed documentation is organized by timeline type:
+
+* `Profile <embedded-timelines-profile>`__
+* `List <embedded-timelines-list>`__
+* `Search <embedded-timelines-search>`__,
+* `Collection <embedded-timelines-collection>`__
