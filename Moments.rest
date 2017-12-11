@@ -1,0 +1,70 @@
+The Twitter plugin for WordPress supports embedding `Moments <https://support.twitter.com/articles/20174546>`__ by pasting a Tweet URL into the WordPress post editor or by customizing a ``[twitter_moment]`` `shortcode <http://codex.wordpress.org/Shortcode>`__.
+
+Embed using a Moment URL
+------------------------
+
+Embed a `Moment <https://dev.twitter.com/web/embedded-moments>`__ in a WordPress post by pasting a Moment URL on its own line in the post editor.
+
+::
+
+    A recap of top Tweets of 2016
+
+    https://twitter.com/i/moments/814165386312712192
+
+    Illustrating black holes.
+
+The Twitter plugin for WordPress extends WordPress oEmbed with additional plugin-specific functionality. URL-based embeds pass through the plugin's shortcode handler for site-wide customization of Tweet parameters. JavaScript normally returned in an oEmbed response is enqueued through the WordPress resource manager, improving site performance while centralizing customizations.
+
+Embed using a shortcode
+-----------------------
+
+The Twitter plugin for WordPress registers the ``twitter_moment`` shortcode handler to allow customization of an embedded Moment through a shortcode macro.
+
+::
+
+    A recap of top Tweets of 2016
+
+    [twitter_moment id="814165386312712192" limit="6"]
+
+    Illustrating black holes.
+
+
+Supported shortcode parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++-----------+------------------------------------------------------------------------------------+------------------------+
+| Attribute | Description                                                                        | Example                |
++===========+====================================================================================+========================+
+| **id**    | The numerical ID of the desired Moment. Appears as the final path component of URL | ``814165386312712192`` |
++-----------+------------------------------------------------------------------------------------+------------------------+
+| width     | Set the maximum width of the grid in whole pixels                                  | ``500``                |
++-----------+------------------------------------------------------------------------------------+------------------------+
+| limit     | Limit the maximum number of Tweets displayed                                       | ``5``                  |
++-----------+------------------------------------------------------------------------------------+------------------------+
+| chrome    | Remove the footer component of the embedded grid template                          | ``nofooter``           |
++-----------+------------------------------------------------------------------------------------+------------------------+
+
+Site-wide customization using a filter
+--------------------------------------
+
+A website may set site-wide preferences for embedded Tweets by acting on the associative array passed to the ``shortcode_atts_twitter_moment`` `filter <http://codex.wordpress.org/Plugin_API#Filters>`__. Functions acting on the filter should set a decimal integer when modifying the value of the ``width`` or ``limit`` key.
+
+Example:
+
+.. code:: php
+
+    /**
+     * Always limit the maximum number of Tweets displayed in a moment
+     *
+     * @param array $out Parsed user-defined valid attributes or default attribute value
+     * @param array $pairs supported attributes and their default values
+     * @param array $attributes user-defined attributes in the shortcode tag
+     *
+     * @return array options array with our customization applied
+     */
+    function moment_custom_options( $out, $pairs, $attributes )
+    {
+      $out['limit'] = 5;
+      return $out;
+    }
+    add_filter( 'shortcode_atts_twitter_moment', 'moment_custom_options', 10, 3 );
