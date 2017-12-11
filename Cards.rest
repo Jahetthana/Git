@@ -1,0 +1,229 @@
+The Twitter plugin for WordPress automatically generates `Cards <https://dev.twitter.com/cards/overview>`__ markup for your website. Cards delivery content summaries, site and author attribution when your site's links are shared on Twitter.
+
+.. raw:: html
+
+   <div>
+
+|image0|
+
+.. raw:: html
+
+   </div>
+
+The plugin generates markup for a `summary Card <https://dev.twitter.com/cards/types/summary>`__ for most of your site's pages by default. Post authors may input a custom card title or description in the post editor.
+
+.. raw:: html
+
+   <div>
+
+|Card customization WordPress post editor|
+
+.. raw:: html
+
+   </div>
+
+.. raw:: html
+
+   <div id="filters">
+
+Filters
+-------
+
+The following filters are called during the `wp_head action <http://codex.wordpress.org/Plugin_API/Action_Reference/wp_head>`__ as part of Cards markup generation. Add your filter before the ``wp_head`` action to be included in Cards customizations.
+
+-  `twitter\_card\_type <#twitter_card_type>`__
+-  `twitter\_card\_title <#twitter_card_title>`__
+-  `twitter\_card\_description <#twitter_card_description>`__
+-  `twitter\_excerpt\_length <#twitter_excerpt_length>`__
+-  `twitter\_excerpt\_more <#twitter_excerpt_more>`__
+-  `twitter\_card\_intermediate\_image\_size <#twitter_card_intermediate_image_size>`__
+-  `twitter\_card <#twitter_card>`__
+
+.. raw:: html
+
+   <section id="twitter_card_type">
+
+twitter\_card\_type
+~~~~~~~~~~~~~~~~~~~
+
+Customize the `Card <https://dev.twitter.com/cards/overview>`__ template to be applied for the current webpage. The provided value should match what your site would provide in a ``twitter:card`` meta element value. Default: `summary <https://dev.twitter.com/cards/types/summary>`__
+
+The filter passes two additional parameters to assist in customizations based on the current context. The query type parameter is similar to a `WP\_Query <http://codex.wordpress.org/Class_Reference/WP_Query>`__ conditional (``archive``, ``author``, ``home``, ``post``). The object ID parameter passes an object identifier for the query type, if applicable, such as the post or author identifier.
+
+The plugin's Card markup builder attempts to auto-generate a Card based on the template properties of the selected Card. Providing an override at this specific filter, instead of the more generic `twitter_card <#twitter_card>`__ filter, allows the markup generator to include or exclude features such as a description or number of images when building Card markup for the page.
+
+Customization example:
+
+.. code:: php
+
+    function twitter_card_type( $card_type, $query_type, $object_id )
+    {
+      return 'summary_large_image';
+    }
+    add_filter('twitter_card_type', 'twitter_card_type', 10, 3);
+
+.. raw:: html
+
+   </section><section id="twitter_card_title">
+
+twitter\_card\_title
+~~~~~~~~~~~~~~~~~~~~
+
+Set the title template component of the Card. Twitter may truncate this provided value after 70 characters. Return an empty string to omit the ``twitter:title`` meta element from your page for possible selection of a more generic title such as an Open Graph protocol title property.
+
+A title is only passed through this filter when not explicitly provided by the website for display in a Card template. This distinction is meant to simplify possible overrides by other plugins. The plugin will not generate a title for a post permalink if the `post type does not support <http://codex.wordpress.org/Function_Reference/post_type_supports>`__ the title feature. Act on the
+`twitter_card <#twitter_card>`__ filter to always override this value late in the card builder process.
+
+Defaults by ``query_type`` parameter (simplified):
+
++------------+-------------------------------------------------------------------------------+
+| Query Type | Default                                                                       |
++============+===============================================================================+
+| home       | "Site Title" set in Settings > General                                        |
++------------+-------------------------------------------------------------------------------+
+| author     | Author display name, set in a user profile's "Display name publicly as" field |
++------------+-------------------------------------------------------------------------------+
+| archive    | The result of ``get_the_archive_title()`` if supported (WP 4.1+)              |
++------------+-------------------------------------------------------------------------------+
+| post       | ``WP\_Post`` ``post\_title``                                                  |
++------------+-------------------------------------------------------------------------------+
+
+Customization example:
+
+.. code:: php
+
+    function twitter_card_title( $title, $query_type, $object_id )
+    {
+      return 'Custom title';
+    }
+    add_filter('twitter_card_title', 'twitter_card_title', 10, 3);
+
+.. raw:: html
+
+   </section><section id="twitter_card_description">
+
+twitter\_card\_description
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set the description template component of a Card, if supported by the chosen card template. Twitter may truncate this value. Return an empty string to omit the ``twitter:description`` meta element from your page.
+
+A description is only passed through this filter when not explicitly provided by the website for display in a Card template. This distinction is meant to simplify possible overrides by other plugins. The plugin will not generate a description for a post permalink if the `post type does not support <http://codex.wordpress.org/Function_Reference/post_type_supports>`__ the description feature. Act on the `twitter_card <#twitter_card>`__ filter to always override this value late in the card builder process.
+
+Defaults by ``query_type`` parameter (simplified):
+
++------------+---------------------------------------------------------------------------------------------------------------------+
+| query type | default                                                                                                             |
++============+=====================================================================================================================+
+| home       | "Tagline" set in Settings > General                                                                                 |
++------------+---------------------------------------------------------------------------------------------------------------------+
+| author     | Author description, set in a user profile's "Biographical Info" field.                                              |
++------------+---------------------------------------------------------------------------------------------------------------------+
+| archive    | The result of ``get_the_archive_description()`` if supported (WP 4.1+)                                              |
++------------+---------------------------------------------------------------------------------------------------------------------+
+| post       | WP\_Post post\_excerpt after passing through the get\_the\_excerpt filter or a generated excerpt from post\_content |
++------------+---------------------------------------------------------------------------------------------------------------------+
+
+Customization example:
+
+.. code:: php
+
+    function twitter_card_description( $description, $query_type, $object_id )
+    {
+      return 'Custom description';
+    }
+    add_filter('twitter_card_description', 'twitter_card_description', 10, 3);
+
+.. raw:: html
+
+   </section><section id="twitter_excerpt_length">
+
+twitter\_excerpt\_length
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Trim the Card description after a specified number of words. Twitter may further truncate this text depending on display context. Default: ``55``
+
+Similar to `excerpt\_length <http://codex.wordpress.org/Plugin_API/Filter_Reference/excerpt_length>`__ for a Twitter-specific excerpt.
+
+Customization example:
+
+.. code:: php
+
+    function twitter_excerpt_length( $num_words )
+    {
+      return 42;
+    }
+    add_filter('twitter_excerpt_length', 'twitter_excerpt_length');
+
+.. raw:: html
+
+   </section><section id="twitter_excerpt_more">
+
+twitter\_excerpt\_more
+~~~~~~~~~~~~~~~~~~~~~~
+
+String to append to the Card description to indicate truncated content. Default: ``&hellip;``
+
+Similar to `excerpt\_more <http://codex.wordpress.org/Plugin_API/Filter_Reference/excerpt_more>`__ for a Twitter-specific excerpt.
+
+Customization example:
+
+.. code:: php
+
+    add_filter('twitter_excerpt_more', '__return_empty_string');
+
+.. raw:: html
+
+   </section><section id="twitter_card_intermediate_image_size">
+
+twitter\_card\_intermediate\_image\_size
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An intermediate image size name to be used to generate the Card image URL. Default: ``large``
+
+The Card markup generator will use the specified intermediate size if a full-size image exceeds the maximum file size supported by Twitter. Twitter will generate thumbnails appropriate for display in various dimensions based on the provided image.
+
+Customization example:
+
+.. code:: php
+
+    function twitter_image_size( $size, $attachment_id )
+    {
+      return 'extralarge';
+    }
+    add_filter('twitter_card_intermediate_image_size', 'twitter_image_size', 10, 2);
+
+.. raw:: html
+
+   </section><section id="twitter_card">
+
+twitter\_card
+~~~~~~~~~~~~~
+
+Customize Card markup before they are output on the webpage as ``<meta>`` elements. Card values are passed as an associative array, with structured property values defined as array values.
+
+Use a more specific filter if available to tie-in to the Cards markup builder at the most appropriate build stage.
+
+Customization example:
+
+.. code:: php
+
+    function twitter_card( $card_properties )
+    {
+      if ( empty( $card_properties['image'] ) ) {
+        $card_properties['image'] = 'https://example.com/logo.jpg';
+      }
+      return $card_properties;
+    }
+    add_filter('twitter_card', 'twitter_card');
+
+.. raw:: html
+
+   </section>
+
+.. raw:: html
+
+   </div>
+
+.. |image0| image:: https://g.twimg.com/dev/documentation/image/nytimes-twitter-card_0.jpg
+   :target: https://twitter.com/nytfood/status/659756085486727168
+.. |Card customization WordPress post editor| image:: https://g.twimg.com/dev/documentation/image/custom-card-share.png
