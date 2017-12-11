@@ -1,0 +1,86 @@
+The Twitter plugin for WordPress supports embedding the latest Tweets from a list of Twitter accounts by pasting a Twitter list URL into the WordPress post editor or by customizing a ``[twitter_list]`` `WordPress shortcode <http://codex.wordpress.org/Shortcode>`__. WordPress users capable of editing themes may add a Twitter list to a theme's widget area through `the WordPress widget editor <https://codex.wordpress.org/Appearance_Widgets_Screen>`__.
+
+Embed using a Twitter list URL
+------------------------------
+
+Add an `embedded list timeline <https://dev.twitter.com/web/embedded-timelines/list>`__ to a WordPress post by copy-and-pasting a `Twitter list URL <https://support.twitter.com/articles/76460>`__ on its own line in the post content area.
+
+::
+
+    People currently floating through space
+
+    https://twitter.com/NASA/lists/astronauts-in-space-now
+
+    Sharing experiments and views from above.
+
+The Twitter plugin for WordPress extends the oEmbed functionality for Twitter list URLs available since WordPress 4.7 with additional plugin-specific functionality. URL-based embeds pass through the plugin's shortcode handler for site-wide customization of parameters. JavaScript normally returned in an oEmbed response is enqueued through the WordPress resource manager, improving site performance while centralizing customizations.
+
+Embed using a shortcode
+-----------------------
+
+The Twitter plugin for WordPress registers the `twitter_list` shortcode handler to allow customization of an embedded list timeline through a shortcode macro.
+
+::
+
+    People currently floating through space
+
+    [twitter_list screen_name="NASA" slug="astronauts-in-space-now" height="400"]
+
+    Sharing experiments and views from above.
+
+Supported shortcode parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| Attribute        | Description                                                                                  | Example                     |
++==================+==============================================================================================+=============================+
+| **screen\_name** | The Twitter username of the list owner                                                       | ``NASA``                    |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| **slug**         | The unique name of the list. Appears as the final path component of the list URL             | ``astronauts-in-space-now`` |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| width            | Set the maximum width of the timeline in whole pixels                                        | ``500``                     |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| height           | Set a fixed height of the timeline in whole pixels                                           | ``400``                     |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| limit            | Display a static timeline expanded to up to N Tweets.                                        | ``5``                       |
+|                  | The height attribute has no effect when a limit is specified                                 |                             |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| chrome           | Toggle the display of design elements in the widget with comma-separated tokens.             | ``noheader,nofooter``       |
+|                  | Accepted tokens: ``noheader``, ``nofooter``, ``noborders``, ``noscrollbar``, ``transparent`` |                             |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| aria\_polite     | Set the ARIA politeness of the timeline live region as new Tweets are added                  | ``assertive``               |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| theme            | Set a ``light`` or ``dark`` widget background                                                | ``dark``                    |
+|                  | Overrides the site-wide value set through the plugin settings page                           |                             |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| link\_color      | Adjust the hexadecimal color of links, including hashtags and @mentions, inside each Tweet.  | ``21759b``                  |
+|                  | Overrides the site-wide value set through the plugin settings page                           |                             |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+| border\_color    | Adjust the hexadecimal color of borders between Tweets.                                      | ``d54e21``                  |
+|                  | Overrides the site-wide value set through the plugin settings page                           |                             |
++------------------+----------------------------------------------------------------------------------------------+-----------------------------+
+
+Site-wide customization using a filter
+--------------------------------------
+
+A website may set site-wide preferences for list timelines by acting on the associative array passed to the ``shortcode_atts_twitter_list`` `WordPress filter <http://codex.wordpress.org/Plugin_API#Filters>`__. Functions acting on the filter should set a decimal integer when modifying the value of the ``width``, ``height``, or ``limit`` key.
+
+Example:
+
+.. code:: php
+
+    /**
+     * Always display a timeline at a height of 400 pixels
+     *
+     * @param array $out        Parsed user-defined valid attributes or default attribute value
+     * @param array $pairs      supported attributes and their default values
+     * @param array $attributes user-defined attributes in the shortcode tag
+     *
+     * @return array options array with our customization applied
+     */
+    function timeline_custom_options( $out, $pairs, $attributes )
+    {
+      $out['height'] = 400;
+      return $out;
+    }
+    add_filter( 'shortcode_atts_twitter_list', 'timeline_custom_options', 10, 3 );
