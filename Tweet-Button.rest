@@ -1,0 +1,65 @@
+The Twitter plugin for WordPress supports generating a Tweet button through the ``twitter_share`` `shortcode <http://codex.wordpress.org/Shortcode>`__. Add a Tweet button to a WordPress post by including the shortcode in the post editor. Or evaluate a shortcode in PHP using the `do\_shortcode WordPress function <http://codex.wordpress.org/Function_Reference/do_shortcode>`__.
+
+Example:
+
+::
+
+    Share this post:
+
+    [twitter_share]
+
+Supported shortcode attributes
+------------------------------
+
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| Attribute     | Description                                                                                                                                                                     | Example                                   |
++===============+=================================================================================================================================================================================+===========================================+
+| text          | Pre-populated text highlighted in the Tweet composer.                                                                                                                           | ``Hello world``                           |
+|               | A text value provided in a shortcode overrides the text value provided in the post editor.                                                                                      |                                           |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| hashtags      | A comma-separated list of `hashtags <https://support.twitter.com/entries/49309>`__ to include with the Tweet.                                                                   | ``cute,funny``                            |
+|               | A hashtags value provided in a shortcode overrides the hashtags value provided in the post editor.                                                                              |                                           |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| url           | URL included with the Tweet.                                                                                                                                                    | ``https://example.com/``                  |
+|               | Automatically set to the permalink value for the post after passing through the ``twitter_url`` filter when executed inside `the loop <http://codex.wordpress.org/The_Loop>`__. |                                           |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| via           | Attribute the source of a Tweet to a Twitter username.                                                                                                                          | ``TwitterDev``                            |
+|               | Defaults to the Twitter username provided in the Site Attribution section of the Twitter settings page.                                                                         |                                           |
+|               | May be overridden by the ``twitter_via_username`` filter.                                                                                                                       |                                           |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| related       | A comma-separated list of Twitter accounts related to the shared content with an optional description of the relation provided after a semicolon.                               | ``twittermusic:Music,twittermedia:Media`` |
+|               | Related accounts may be displayed after a Tweet to encourage a Tweet author to follow an account.                                                                               |                                           |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| in\_reply\_to | Specify a Tweet ID for a new Tweet to appear in reply to another Tweet.                                                                                                         | ``463440424141459456``                    |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| align         | Set to ``left`` or ``right`` to force align the button inside the generated iframe.                                                                                             | ``right``                                 |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+| size          | Set to ``large`` to display a larger version of the Tweet button.                                                                                                               | ``large``                                 |
++---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------+
+
+Site-wide customization using a filter
+--------------------------------------
+
+A website may programmatically set Tweet button parameters by acting on the associative array passed to the ``shortcode_atts_twitter_share`` `WordPress filter <http://codex.wordpress.org/Plugin_API#Filters>`__.
+
+Functions acting on the filter should treat the value associated with the ``hashtags`` key as a positional array of unique values. The value associated with the ``related`` key should be treated as an associative array with keys of Twitter usernames and values describing each username (or an empty string if no description).
+
+Example:
+
+.. code:: php
+
+    /**
+     * Always show a large button
+     *
+     * @param array $options parsed options with defaults applied
+     * @param array $defaults default values of a Tweet button
+     * @param array $attributes user-defined shortcode attributes
+     *
+     * @return array options array with our customization applied
+     */
+    function twitter_share_custom_options( $options, $defaults, $attributes )
+    {
+      $options['size'] = 'large';
+      return $options;
+    }
+    add_filter( 'shortcode_atts_twitter_share', 'twitter_share_custom_options', 10, 3 );
