@@ -14,10 +14,10 @@
 
 ## Timeline Types
 
-* [Collections](Embedded-Timeline:-Collection)
-* [Lists](Embedded-Timeline:-List)
-* [Profiles](Embedded-Timeline:-Profile)
-* [Search](Embedded-Timeline:-Search)
+* [Collections](Embedded-Collection-Timeline)
+* [Lists](Embedded-List-Timeline)
+* [Profiles](Embedded-Profile-Timeline)
+* [Search](Embedded-Search-Timeline)
 
 # Twitter Platform Integration
 
