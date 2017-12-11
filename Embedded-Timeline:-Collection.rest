@@ -3,7 +3,7 @@ The Twitter plugin for WordPress supports embedding the a curated set of Tweets 
 Embed using a Twitter collection URL
 ------------------------------------
 
-Add an `embedded collection </web/embedded-timelines/collection>`__ to a WordPress post by copy-and-pasting a Twitter collection URL on its own line in the post content area. A collection will appear as a stacked list of Tweets.
+Add an `embedded collection <https://dev.twitter.com/web/embedded-timelines/collection>`__ to a WordPress post by copy-and-pasting a Twitter collection URL on its own line in the post content area. A collection will appear as a stacked list of Tweets.
 
 ::
 
