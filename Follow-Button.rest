@@ -1,0 +1,71 @@
+The Twitter plugin for WordPress supports adding a `follow button </web/follow-button>`__ to your site through a `WordPress widget <https://codex.wordpress.org/WordPress_Widgets>`__, pasting a Twitter profile URL into post content, or through the ``twitter_follow`` `WordPress shortcode <http://codex.wordpress.org/Shortcode>`__. Add a Follow button to a WordPress post by including the shortcode in
+your post content area or by evaluating a shortcode in PHP using the `do\_shortcode WordPress function <http://codex.wordpress.org/Function_Reference/do_shortcode>`__.
+
+.. raw:: html
+
+   <div><a href="https://twitter.com/TwitterDev" class="twitter-follow-button">Follow @TwitterDev</a></div>
+
+Display a follow button for a Twitter profile URL
+-------------------------------------------------
+
+Add a follow button to a WordPress post by copy-and-pasting a Twitter profile URL on its own line in the post content area.
+
+::
+
+    I post updates on Twitter.
+
+    https://twitter.com/TwitterDev
+
+    Follow my account to receive updates.
+
+Customize a follow button using a shortcode
+-------------------------------------------
+
+Example:
+
+::
+
+    Follow us on Twitter:
+
+    [twitter_follow screen_name="TwitterDev"]
+
+Supported shortcode parameters
+------------------------------
+
++--------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------+
+| Attribute          | Description                                                                                                                   | Example        |
++====================+===============================================================================================================================+================+
+| **screen\_name**   | Twitter username of the account to follow.                                                                                    | ``TwitterDev`` |
++--------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------+
+| show\_screen\_name | Set to ``false``, ``0``, ``no``, or ``off`` to remove the Twitter username from the displayed button.                         | ``false``      |
++--------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------+
+| show\_count        | Set to ``false``, ``0``, ``no``, or ``off`` to remove the number of followers for the specified account alongside the button. | ``false``      |
++--------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------+
+| size               | Set to ``large`` to display a larger version of the follow button.                                                            | ``large``      |
++--------------------+-------------------------------------------------------------------------------------------------------------------------------+----------------+
+
+
+Site-wide customization using a filter
+--------------------------------------
+
+A website may set site-wide preferences for Follow buttons by acting on the associative array passed to the ``shortcode_atts_twitter_follow`` `WordPress filter <http://codex.wordpress.org/Plugin_API#Filters>`__. Functions acting on the filter should set `boolean literals <http://php.net/manual/language.types.boolean.php>`__ when modifying ``show_count`` or ``show_screen_name`` values.
+
+Example:
+
+.. code:: php
+
+    /**
+     * Always show large button
+     *
+     * @param array $options parsed options with defaults applied
+     * @param array $defaults default values of a Follow button
+     * @param array $attributes user-defined shortcode attributes
+     *
+     * @return array options array with our customization applied
+     */
+    function twitter_follow_custom_options( $options, $defaults, $attributes )
+    {
+      $options['size'] = 'large';
+      return $options;
+    }
+    add_filter( 'shortcode_atts_twitter_follow', 'twitter_follow_custom_options', 10, 3 );
