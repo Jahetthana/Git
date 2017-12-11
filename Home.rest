@@ -1,0 +1,72 @@
+The `Twitter plugin for WordPress <https://wordpress.org/plugins/twitter/>`__ bundles best-practice Twitter for Websites integrations into an installable package for websites powered by `WordPress <https://wordpress.org/>`__.
+
+Cards
+-----
+
+`Automatically generate Cards <cards>`__ to enable link previews and site attribution when your URLs are shared on Twitter.
+
+Customize embedded Tweets
+-------------------------
+
+.. raw:: html
+
+   <div><blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Check out this epic <a href="https://twitter.com/hashtag/sunset?src=hash">#sunset</a> from Zabriskie point <a href="https://twitter.com/DeathValleyNPS">@DeathValleyNPS</a>. Photo: Mahendiran Mohan <a href="https://twitter.com/hashtag/nature?src=hash">#nature</a> <a href="http://t.co/oCfTvA6Pqc">pic.twitter.com/oCfTvA6Pqc</a></p>&mdash; US Dept of Interior (@Interior) <a href="https://twitter.com/Interior/status/559021352448180225">January 24, 2015</a></blockquote></div>
+
+Easily `customize embedded Tweets <embedded-tweet>`__ to match your site design. Choose a dark or light theme, custom link color and custom border color.
+
+Easily embed Tweets and timelines
+---------------------------------
+
+The plugin includes URL handlers for Tweets, profiles, lists, collections, Moments, and Periscope profiles. Easily add Twitter and Periscope widgets to your site using shortcodes or links pasted into the editor.
+
+Enable sharing with Tweet buttons
+---------------------------------
+
+.. raw:: html
+
+   <div><a href="https://twitter.com/share" class="twitter-share-button" data-via="TwitterDev" data-size="large">Tweet</a></div>
+
+`Add a Tweet button <tweet-button>`__ to every post, customize Tweet text, and make it easy to share your content to Twitter.
+
+Grow your Twitter and Periscope audience
+----------------------------------------
+
+.. raw:: html
+
+   <div><a class="twitter-follow-button" href="https://twitter.com/TwitterDev" data-show-count="false" data-size="large" data-show-screen-name="false">Follow @TwitterDev</a></div>
+
+`Add a Follow button <follow-button>`__ to your site to convert website visitors into Twitter followers.
+
+.. raw:: html
+
+   <div><a href="https://www.periscope.tv/twitterdev" class="periscope-on-air" data-size="small">@TwitterDev</a></div>
+
+Add a `Periscope On Air button <periscope-on-air>`_ to promote your Periscope profile and show when you're broadcasting live.
+
+Measure advertising success
+---------------------------
+
+Twitter advertisers can build a custom audience target or track advertising conversions with a `Twitter advertising shortcode <ad-conversion-tracking>`__ added to any webpage.
+
+Customize enabled features across your site or network
+------------------------------------------------------
+
+Enable or disable specific plugin features by acting on the associative array passed through the ``twitter_features`` filter.
+
+=========================  =========================================================
+         Key                                    Description
+=========================  =========================================================
+``cards``                  Cards ``<meta>`` elements used to generate link previews and provide Twitter account bylines when your URLs are shared on Twitter
+``embed-tweet``            Embedded Tweets
+``embed-tweet-video``      Embedded video Tweets
+``embed-profile``          Profile timelines
+``embed-list``             List timelines
+``embed-search``           Search result timelines
+``embed-collection``       Collections
+``embed-collection-grid``  Collections displayed in a grid template
+``embed-moment``           Moments
+``follow``                 Follow buttons
+``share``                  Tweet buttons
+``periscope-on-air``       Periscope On Air buttons
+``ad-pixel``               Custom audience and advertising conversion pixel
+=========================  =========================================================
