@@ -1,0 +1,78 @@
+The Twitter plugin for WordPress supports embedding a sampling of recent public Tweets matching a search query using a widget ID configured on Twitter.com and the ``[twitter_search]`` `WordPress shortcode <http://codex.wordpress.org/Shortcode>`__. WordPress users capable of editing themes may add a Twitter search to a theme's widget area through `the WordPress widget editor <https://codex.wordpress.org/Appearance_Widgets_Screen>`__.
+
+`Create a new stored search query <https://twitter.com/settings/widgets/new/search>`__ from a Twitter account's widgets settings page. A widget ID appears in your browser's address bar on the widget's edit screen:
+
+``https://twitter.com/settings/widgets/{widget_id}/edit``
+
+Copy the numeric ID betweet ``/widgets/`` and ``/edit``. Enter this value for fields prompting for a widget ID.
+
+Embed using a shortcode
+-----------------------
+
+The Twitter plugin for WordPress registers the `twitter_search` shortcode handler to place an `embedded search timeline <https://dev.twitter.com/web/embedded-timelines/search>`__ into a post through a shortcode macro.
+
+::
+
+    Tweets mentioning Twitter open source software
+
+    [twitter_search widget_id="601499769895137281" terms="Tweets about @TwitterOSS" height="400"]
+
+    Follow the conversation on Twitter
+
+Supported shortcode parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| Attribute      | Description                                                                                  | Example                |
++================+==============================================================================================+========================+
+| **widget\_id** | Display a widget configuration stored on Twitter.com                                         | ``601499769895137281`` |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| terms          | Search terms stored for the query. Used to create more relevant link text.                   | ``foo bar``            |
+|                | This attribute has no effect on Tweets displayed in a rendered widget                        |                        |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| width          | Set the maximum width of the timeline in whole pixels                                        | ``500``                |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| height         | Set a fixed height of the timeline in whole pixels.                                          | ``400``                |
+|                | Overrides a value stored with the widget configuration                                       |                        |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| limit          | Display a static timeline expanded to up to N Tweets.                                        | ``5``                  |
+|                | The height attribute has no effect when a limit is specified                                 |                        |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| chrome         | Toggle the display of design elements in the widget with comma-separated tokens.             | ``noheader,nofooter``  |
+|                | Accepted tokens: ``noheader``, ``nofooter``, ``noborders``, ``noscrollbar``, ``transparent`` |                        |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| aria\_polite   | Set the ARIA politeness of the timeline live region as new Tweets are added                  | ``assertive``          |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| theme          | Set a ``light`` or ``dark`` background. Overrides stored widget value                        | ``dark``               |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| link\_color    | Adjust the hexadecimal color of links, including hashtags and @mentions, inside each Tweet.  | ``21759b``             |
+|                | Overrides the site-wide value set through the plugin settings page and stored widget value   |                        |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+| border\_color  | Adjust the hexadecimal color of borders between Tweets.                                      | ``d54e21``             |
+|                | Overrides the site-wide value set through the plugin settings page                           |                        |
++----------------+----------------------------------------------------------------------------------------------+------------------------+
+
+Site-wide customization using a filter
+--------------------------------------
+
+A website may set site-wide preferences for search timelines by acting on the associative array passed to the ``shortcode_atts_twitter_search`` `WordPress filter <http://codex.wordpress.org/Plugin_API#Filters>`__. Functions acting on the filter should set a decimal integer when modifying the value of the ``width``, ``height``, or ``limit`` key.
+
+Example:
+
+.. code:: php
+
+    /**
+     * Always display a timeline at a height of 400 pixels
+     *
+     * @param array $out        Parsed user-defined valid attributes or default attribute value
+     * @param array $pairs      supported attributes and their default values
+     * @param array $attributes user-defined attributes in the shortcode tag
+     *
+     * @return array options array with our customization applied
+     */
+    function timeline_custom_options( $out, $pairs, $attributes )
+    {
+      $out['height'] = 400;
+      return $out;
+    }
+    add_filter( 'shortcode_atts_twitter_search', 'timeline_custom_options', 10, 3 );
