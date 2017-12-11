@@ -1,0 +1,78 @@
+The Twitter plugin for WordPress supports embedding a Tweet by pasting a Tweet URL into the WordPress post editor or by customizing a ``[tweet]`` `WordPress shortcode <http://codex.wordpress.org/Shortcode>`__.
+
+Embed using a Tweet URL
+-----------------------
+
+Add an `embedded Tweet <https://dev.twitter.com/web/embedded-tweets>`__ to a WordPress post by pasting a Tweet URL on its own line in the post editor.
+
+::
+
+    Check out this cool Tweet:
+
+    https://twitter.com/Interior/status/552230355781320704
+
+    That was a cool Tweet.
+
+The Twitter plugin for WordPress extends the oEmbed Tweet URL functionality available since WordPress 3.4 with additional plugin-specific functionality. URL-based embeds pass through the plugin's shortcode handler for site-wide customization of Tweet parameters. JavaScript normally returned in an oEmbed response is enqueued through the WordPress resource manager, improving site performance while centralizing customizations.
+
+Embed using a shortcode
+-----------------------
+
+The Twitter plugin for WordPress registers the ``tweet`` shortcode to allow embedded Tweet customization through a `shortcode <https://codex.wordpress.org/Shortcode>`__ macro.
+
+::
+
+    Check out this cool Tweet:
+
+    [tweet id="552230355781320704" align="right"]
+
+    That was a cool Tweet.
+
+
+Supported shortcode parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+| Attribute    | Description                                                                                                                                         | Example                |
++==============+=====================================================================================================================================================+========================+
+| **id**       | The numerical ID of the desired Tweet.                                                                                                              | ``552230355781320704`` |
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+| cards        | Set to ``false``, ``0``, ``no``, or ``off`` to disable auto-expanding a video, photo, or link preview.                                              | ``false``              |
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+| conversation | Set to ``false``, ``0``, ``no``, or ``off`` to disable display of the previous Tweet in a conversation if the Tweet was in reply to another Tweet.  | ``false``              |
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+| align        | Set to ``left``, ``center``, or ``right`` to `float <https://developer.mozilla.org/docs/Web/CSS/float>`__ the Tweet relative to the parent element. | ``right``              |
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+| width        | Set a maximum width of the Tweet                                                                                                                    | ``500``                |
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+| theme        | Set a ``light`` or ``dark`` widget background                                                                                                       | ``dark``               |
+|              | Overrides the site-wide value set through the plugin settings page                                                                                  |                        |
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+| link\_color  | Adjust the hexadecimal color of links, including hashtags and @mentions, inside each Tweet.                                                         | ``21759b``             |
+|              | Overrides the site-wide value set through the plugin settings page                                                                                  |                        |
++--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------+------------------------+
+
+Site-wide customization using a filter
+--------------------------------------
+
+A website may set site-wide preferences for embedded Tweets by acting on the associative array passed to the ``shortcode_atts_tweet`` `WordPress filter <http://codex.wordpress.org/Plugin_API#Filters>`__. Functions acting on the filter should set `boolean literals <http://php.net/manual/language.types.boolean.php>`__ when modifying the value of the ``cards`` or ``conversation`` key.
+
+Example:
+
+.. code:: php
+
+    /**
+     * Always hide previous Tweet in conversation
+     *
+     * @param array $out Parsed user-defined valid attributes or default attribute value
+     * @param array $pairs supported attributes and their default values
+     * @param array $attributes user-defined attributes in the shortcode tag
+     *
+     * @return array options array with our customization applied
+     */
+    function tweet_custom_options( $out, $pairs, $attributes )
+    {
+      $out['conversation'] = false;
+      return $out;
+    }
+    add_filter( 'shortcode_atts_tweet', 'tweet_custom_options', 10, 3 );
