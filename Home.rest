@@ -62,7 +62,6 @@ Enable or disable specific plugin features by acting on the associative array pa
 ``embed-tweet-video``      Embedded video Tweets
 ``embed-profile``          Profile timelines
 ``embed-list``             List timelines
-``embed-search``           Search result timelines
 ``embed-collection``       Collections
 ``embed-collection-grid``  Collections displayed in a grid template
 ``embed-moment``           Moments
