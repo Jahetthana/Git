@@ -17,7 +17,6 @@
 * [Collections](Embedded-Collection-Timeline)
 * [Lists](Embedded-List-Timeline)
 * [Profiles](Embedded-Profile-Timeline)
-* [Search](Embedded-Search-Timeline)
 
 # Twitter Platform Integration
 
